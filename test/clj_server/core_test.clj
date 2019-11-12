@@ -1,4 +1,4 @@
-(ns rtu-web.core-test
+(ns clj_server.core-test
   (:require [clojure.test :refer :all]
             [rtu-web.core :refer :all]))
 
