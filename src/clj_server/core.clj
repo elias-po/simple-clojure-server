@@ -1,25 +1,27 @@
 (ns clj_server.core
   (:require [ring.adapter.jetty :as jetty]))
 (def input [
+            [:h1 "These are the tasks 1a and 1b"]
             [:hr]
-            [:b "test phrase"]
-            [:p [:a "test link"]]
+            [:b "Here is a test phrase"]
+            [:p [:big [:i [:strike "and here is a nested phrase"]]]]
             ])
 (defn open-tag [tag-content]
   (if (vector? tag-content)
-    (if (not= (second tag-content) nil)
-      (let [first (first tag-content)]
-        (apply str (vector "<" first ">"))
-        (open-tag (second tag-content))
-        (apply str (vector "</" first ">"))
+    (let [first (first tag-content)]
+      (if (not= (second tag-content) nil)
+        (str "<" (name first) ">"
+             (open-tag (second tag-content))
+             "</" (name first) ">")
+        (str "<" (name first) "/>")
         )
-      (str "<" first "/>")
       )
     tag-content
     )
   )
+
 (defn gen-html [content]
-  (apply str (map open-tag content))
+  (map open-tag content)
   )
 (defn handler [request]
   {:status  200
